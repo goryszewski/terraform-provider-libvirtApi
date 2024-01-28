@@ -4,6 +4,8 @@ import (
 	"context"
 	"os"
 
+	libvirtApiClient "github.com/goryszewski/libvirtApi-client"
+
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -113,7 +115,7 @@ func (p *libvirtApiProvider) Configure(ctx context.Context, req provider.Configu
 	ctx = tflog.MaskFieldValuesWithFieldKeys(ctx, "libvirtApi_passowrd")
 
 	tflog.Debug(ctx, "Creating libvirtApi Client")
-	client, err := libvirtApi.NewClient(&hostname, &username, &password)
+	client, err := libvirtApiClient.NewClient(&hostname, &username, &password)
 
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to Create libvirtApi Client", "...")
