@@ -1,9 +1,8 @@
-module terraform-provider-libvirtApi
+module terraform-provider-libvirtapi
 
 go 1.20
 
 require (
-	github.com/goryszewski/libvirtApi-client v0.0.0-20240128213822-f177c72154b4
 	github.com/hashicorp/terraform-plugin-framework v1.5.0
 	github.com/hashicorp/terraform-plugin-log v0.9.0
 )

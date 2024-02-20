@@ -1,0 +1,1 @@
+TF_LOG=INFO  terraform apply   -auto-approve
