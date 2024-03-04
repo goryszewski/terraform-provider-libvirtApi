@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	libvirtApiClient "github.com/goryszewski/libvirtApi-client/libvirtApiClient"
+
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
@@ -26,13 +27,13 @@ func NewNetworkResource() resource.Resource {
 
 // networkResource is the resource implementation.
 type networkResource struct {
-	client *Internalclient
+	client *libvirtApiClient.Client
 }
 
 type networkResourceModel struct {
-	ID     types.Int64           `tfsdk:"id"`
-	Name   string                `tfsdk:"name"`
-	Status basetypes.StringValue `tfsdk:"status"`
+	ID     types.Int64 `tfsdk:"id"`
+	Name   string      `tfsdk:"name"`
+	Status types.Int64 `tfsdk:"status"`
 }
 
 func (r *networkResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
@@ -40,12 +41,12 @@ func (r *networkResource) Configure(_ context.Context, req resource.ConfigureReq
 		return
 	}
 
-	client, ok := req.ProviderData.(*Internalclient)
+	client, ok := req.ProviderData.(*libvirtApiClient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *Internalclient, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *libvirtApiClient.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
@@ -69,7 +70,7 @@ func (r *networkResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"name": schema.StringAttribute{
 				Required: true,
 			},
-			"status": schema.StringAttribute{
+			"status": schema.Int64Attribute{
 				Computed: true,
 			},
 		},
@@ -81,13 +82,13 @@ func (r *networkResource) Create(ctx context.Context, req resource.CreateRequest
 	var plan networkResourceModel
 	diags := req.Plan.Get(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
+
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	// plan.name
 	network, err := r.client.CreateNetwork(plan.Name)
-	tflog.Debug(ctx, network.Name)
+
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error creating network",
@@ -95,12 +96,14 @@ func (r *networkResource) Create(ctx context.Context, req resource.CreateRequest
 		)
 		return
 	}
+
 	plan.ID = types.Int64Value(int64(network.ID))
 	plan.Name = network.Name
-	plan.Status = types.StringValue(network.Status)
-	tflog.Debug(ctx, plan.Name)
+	plan.Status = types.Int64Value(int64(network.Status))
+
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)
+
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -114,7 +117,8 @@ func (r *networkResource) Read(ctx context.Context, req resource.ReadRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	network, err := r.client.GetNetwork(state.ID)
+	tflog.Info(ctx, "Moj test")
+	network, err := r.client.GetNetwork(int(state.ID.ValueInt64()))
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading HashiCups Order",
@@ -125,7 +129,7 @@ func (r *networkResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	state.ID = types.Int64Value(int64(network.ID))
 	state.Name = network.Name
-	state.Status = types.StringValue(network.Status)
+	state.Status = types.Int64Value(int64(network.Status))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -149,7 +153,7 @@ func (r *networkResource) Delete(ctx context.Context, req resource.DeleteRequest
 	}
 
 	// Delete existing order
-	err := r.client.DeleteNetwork(state.ID)
+	err := r.client.DeleteNetwork(int(state.ID.ValueInt64()))
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Deleting HashiCups Order",

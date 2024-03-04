@@ -2,7 +2,9 @@ package provider
 
 import (
 	"context"
+	"net/http"
 	"os"
+	"time"
 
 	libvirtApiClient "github.com/goryszewski/libvirtApi-client/libvirtApiClient"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -116,7 +118,7 @@ func (p *libvirtapiProvider) Configure(ctx context.Context, req provider.Configu
 	tflog.Debug(ctx, "Creating libvirtapi Client")
 	// &hostname, &username, &password
 	conf := libvirtApiClient.Config{&username, &password, &hostname}
-	client, err := libvirtApiClient.NewClient(conf)
+	client, err := libvirtApiClient.NewClient(conf, &http.Client{Timeout: 10 * time.Second})
 
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to Create libvirtapi Client", "...")

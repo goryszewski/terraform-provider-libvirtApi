@@ -13,8 +13,6 @@ provider "libvirtapi" {
   password = "test"
 }
 
-# data "libvirtapi_ip" "example" {}
-
 resource "libvirtapi_network" "internal01" {
   name = "ha"
 }
@@ -22,6 +20,3 @@ resource "libvirtapi_network" "internal01" {
 resource "libvirtapi_network" "internal11" {
   name = "db"
 }
-
-
-
