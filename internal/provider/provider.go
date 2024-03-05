@@ -91,10 +91,10 @@ func (p *libvirtapiProvider) Configure(ctx context.Context, req provider.Configu
 		hostname = config.Hostname.ValueString()
 	}
 	if !config.Username.IsNull() {
-		username = config.Hostname.ValueString()
+		username = config.Username.ValueString()
 	}
 	if !config.Password.IsNull() {
-		password = config.Hostname.ValueString()
+		password = config.Password.ValueString()
 	}
 
 	if hostname == "" {
@@ -116,8 +116,8 @@ func (p *libvirtapiProvider) Configure(ctx context.Context, req provider.Configu
 	ctx = tflog.MaskFieldValuesWithFieldKeys(ctx, "libvirtapi_passowrd")
 
 	tflog.Debug(ctx, "Creating libvirtapi Client")
-	// &hostname, &username, &password
-	conf := libvirtApiClient.Config{&username, &password, &hostname}
+
+	conf := libvirtApiClient.Config{Username: &username, Password: &password, Url: &hostname}
 	client, err := libvirtApiClient.NewClient(conf, &http.Client{Timeout: 10 * time.Second})
 
 	if err != nil {
@@ -132,7 +132,9 @@ func (p *libvirtapiProvider) Configure(ctx context.Context, req provider.Configu
 }
 
 func (p *libvirtapiProvider) DataSources(_ context.Context) []func() datasource.DataSource {
-	return nil
+	return []func() datasource.DataSource{
+		NewNetworkDataSource,
+	}
 }
 
 func (p *libvirtapiProvider) Resources(_ context.Context) []func() resource.Resource {

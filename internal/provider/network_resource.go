@@ -10,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -117,12 +116,12 @@ func (r *networkResource) Read(ctx context.Context, req resource.ReadRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	tflog.Info(ctx, "Moj test")
+
 	network, err := r.client.GetNetwork(int(state.ID.ValueInt64()))
 	if err != nil {
 		resp.Diagnostics.AddError(
-			"Error Reading HashiCups Order",
-			"Could not read HashiCups order ID : "+err.Error(),
+			"Error Reading Network",
+			"Could not read Network ID : "+err.Error(),
 		)
 		return
 	}
@@ -152,12 +151,12 @@ func (r *networkResource) Delete(ctx context.Context, req resource.DeleteRequest
 		return
 	}
 
-	// Delete existing order
+	// Delete existing Network
 	err := r.client.DeleteNetwork(int(state.ID.ValueInt64()))
 	if err != nil {
 		resp.Diagnostics.AddError(
-			"Error Deleting HashiCups Order",
-			"Could not delete order, unexpected error: "+err.Error(),
+			"Error Deleting Network",
+			"Could not delete Network, unexpected error: "+err.Error(),
 		)
 		return
 	}
