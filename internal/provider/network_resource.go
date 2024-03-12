@@ -140,6 +140,35 @@ func (r *networkResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 // Update updates the resource and sets the updated Terraform state on success.
 func (r *networkResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan networkResourceModel
+	diags := req.State.Get(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	updateReq := networkResourceModel{
+		Name: plan.Name,
+	}
+	new_network, err := r.client.UpdateNetwork(updateReq)
+
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Error Update Network",
+			"Could not update Network, unexpected error: "+err.Error(),
+		)
+		return
+	}
+
+	plan.ID = types.Int64Value(int64(new_network.ID))
+	plan.Name = new_network.Name
+	plan.Status = types.Int64Value(int64(new_network.Status))
+
+	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
 // Delete deletes the resource and removes the Terraform state on success.
