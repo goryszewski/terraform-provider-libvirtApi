@@ -13,6 +13,8 @@ github.com/goryszewski/libvirtApi-client v0.0.0-20240304093857-72d3d210c871 h1:8
 github.com/goryszewski/libvirtApi-client v0.0.0-20240304093857-72d3d210c871/go.mod h1:Z2Ax/DoljpOA3fAY62ptRoBegFA2WfUD0JtFSOAKOHI=
 github.com/goryszewski/libvirtApi-client v0.0.0-20240304101456-d49c04bbc5b1 h1:xStheOASXz0zAGjyzO7/m9+EJ9SvPnFNQH4AuDLGyvM=
 github.com/goryszewski/libvirtApi-client v0.0.0-20240304101456-d49c04bbc5b1/go.mod h1:Z2Ax/DoljpOA3fAY62ptRoBegFA2WfUD0JtFSOAKOHI=
+github.com/goryszewski/libvirtApi-client v0.0.0-20240328210728-fc8f60b2d3ae h1:KjgUoAgKD9LIxdoXq9pUeO0RRdOKLAL82pYMxOi0YVc=
+github.com/goryszewski/libvirtApi-client v0.0.0-20240328210728-fc8f60b2d3ae/go.mod h1:Z2Ax/DoljpOA3fAY62ptRoBegFA2WfUD0JtFSOAKOHI=
 github.com/hashicorp/go-hclog v1.5.0 h1:bI2ocEMgcVlz55Oj1xZNBsVi900c7II+fWDyV9o+13c=
 github.com/hashicorp/go-hclog v1.5.0/go.mod h1:W4Qnvbt70Wk/zYJryRzDRU/4r0kIg0PVHBcfoyhpF5M=
 github.com/hashicorp/go-plugin v1.6.0 h1:wgd4KxHJTVGGqWBq4QPB1i5BZNEx9BR8+OFmHDmTk8A=
