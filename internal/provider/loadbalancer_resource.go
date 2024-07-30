@@ -29,6 +29,7 @@ type loadbalancerResource struct {
 }
 
 type loadbalancerResourceModel struct {
+	//  DOTO poprawic model w clientApi
 }
 
 func (r *loadbalancerResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
@@ -125,8 +126,8 @@ func (r *loadbalancerResource) Create(ctx context.Context, req resource.CreateRe
 		)
 		return
 	}
-
-	plan.Name = loadbalancer
+	//  DOTO poprawic model w clientApi
+	// plan.Name = loadbalancer
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)
