@@ -1,1 +1,1 @@
-TF_LOG=INFO  terraform apply   -auto-approve
+https://developer.hashicorp.com/terraform/plugin/sdkv2

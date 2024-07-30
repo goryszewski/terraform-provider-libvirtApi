@@ -147,7 +147,7 @@ func (r *networkResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	updateReq := networkResourceModel{
+	updateReq := libvirtApiClient.NetworkR{
 		Name: plan.Name,
 	}
 	new_network, err := r.client.UpdateNetwork(updateReq)

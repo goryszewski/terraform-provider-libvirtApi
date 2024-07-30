@@ -55,7 +55,7 @@ func (d *loadbalancerDataSource) Configure(_ context.Context, req datasource.Con
 	d.client = client
 }
 func (r *loadbalancerDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_network"
+	resp.TypeName = req.ProviderTypeName + "_loadbalancer"
 }
 func (d *loadbalancerDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
