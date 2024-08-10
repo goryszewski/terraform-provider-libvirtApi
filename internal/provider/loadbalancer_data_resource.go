@@ -7,30 +7,7 @@ import (
 	libvirtApiClient "github.com/goryszewski/libvirtApi-client/libvirtApiClient"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-type loadbalancerDataSource struct {
-	client *libvirtApiClient.Client
-}
-type Node struct {
-	name     string
-	internal string
-	external string
-}
-type Port struct {
-	name     string
-	protocol string
-	port     types.Int64
-	nodeport types.Int64
-}
-
-type loadbalancerDataSourceModel struct {
-	name      string
-	namespace string
-	ports     []Port
-	nodes     []Node
-}
 
 var (
 	_ datasource.DataSource              = &loadbalancerDataSource{}
@@ -92,11 +69,8 @@ func (d *loadbalancerDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"internal": schema.StringAttribute{
-							Computed: true,
-						},
-						"external": schema.StringAttribute{
-							Computed: true,
+						"ip": schema.StringAttribute{
+							Required: true,
 						},
 					},
 				},
@@ -133,19 +107,18 @@ func (d *loadbalancerDataSource) Read(ctx context.Context, req datasource.ReadRe
 	var ports []Port
 	for _, port := range loadbalancer.Ports {
 		port_object := Port{
-			name:     port.Name,
-			protocol: port.Protocol,
-			port:     types.Int64Value(int64(port.Port)),
-			nodeport: types.Int64Value(int64(port.NodePort)),
+			Name:     port.Name,
+			Protocol: port.Protocol,
+			Port:     port.Port,
+			NodePort: port.NodePort,
 		}
 		ports = append(ports, port_object)
 	}
 	var nodes []Node
 	for _, node := range loadbalancer.Nodes {
 		node_object := Node{
-			name:     node.Name,
-			internal: node.Internal,
-			external: node.External,
+			Name: node.Name,
+			IP:   node.IP,
 		}
 		nodes = append(nodes, node_object)
 	}

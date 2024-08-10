@@ -139,6 +139,6 @@ func (p *libvirtapiProvider) DataSources(_ context.Context) []func() datasource.
 
 func (p *libvirtapiProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewNetworkResource,
+		NewNetworkResource, NewLoadbalancerResource,
 	}
 }
